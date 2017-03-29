@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>{:C('COMM_TITLE')}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- STYLESHEETS --><!--[if lt IE 9]>
+    <script src="__PUBLIC__/admin/js/flot/excanvas.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/cloud-admin.css" >
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/css/themes/default.css" id="skin-switcher" >
+    <link rel="stylesheet" type="text/css"  href="__PUBLIC__/admin/css/responsive.css" >
+
+    <link href="__PUBLIC__/admin/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- DATE RANGE PICKER -->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+    <!-- TABLE CLOTH -->
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/typeahead/typeahead.css"/>
+    <!-- FILE UPLOAD -->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/bootstrap-fileupload/bootstrap-fileupload.min.css"/>
+    <!-- SELECT2 -->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/select2/select2.min.css"/>
+    <!-- UNIFORM -->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/js/uniform/css/uniform.default.min.css"/>
+       <link href="__PUBLIC__/admin/js/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+    <link href="__PUBLIC__/admin/js/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+    <script src="__PUBLIC__/kindeditor/kindeditor.js"></script>
+    <script>
+
+        KindEditor.ready(function(K) {
+            window.editor = K.create('#desc',{
+                    width : '700px',
+                    height : '350px'
+                }
+            );
+        });
+    </script>
+   
+
+    <!-- FONTS -->
+
+</head>
+<body>
+<!-- HEADER -->
+<header class="navbar clearfix" id="header">
+    <div class="container">
+        <div class="navbar-brand">
+            <!-- COMPANY LOGO -->
+            <a href="index.html" style="text-decoration:none">
+                <span style="color: white;padding-left: 64px;">rookieCMS</span>
+            </a>
+            <!-- /COMPANY LOGO -->
+            <!-- TEAM STATUS FOR MOBILE -->
+            <div class="visible-xs">
+                <a href="#" class="team-status-toggle switcher btn dropdown-toggle">
+                    <i class="fa fa-users"></i>
+                </a>
+            </div>
+            <!-- /TEAM STATUS FOR MOBILE -->
+            <!-- SIDEBAR COLLAPSE -->
+            <div id="sidebar-collapse" class="sidebar-collapse btn">
+                <i class="fa fa-bars"
+                        data-icon1="fa fa-bars"
+                        data-icon2="fa fa-bars" ></i>
+            </div>
+            <!-- /SIDEBAR COLLAPSE -->
+        </div>
+        <!-- NAVBAR LEFT -->
+        <ul class="nav navbar-nav pull-left hidden-xs" id="navbar-left">
+
+
+        </ul>
+        <!-- /NAVBAR LEFT -->
+        <!-- BEGIN TOP NAVIGATION MENU -->
+        <ul class="nav navbar-nav pull-right">
+            <!-- BEGIN NOTIFICATION DROPDOWN -->
+            <li class="dropdown" id="header-notification">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-bell"></i>
+                    <span class="badge"></span>
+
+                </a>
+
+            </li>
+            <!-- END NOTIFICATION DROPDOWN -->
+            <!-- BEGIN INBOX DROPDOWN -->
+            <li class="dropdown" id="header-message">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-envelope"></i>
+                    <span class="badge"></span>
+                </a>
+
+            </li>
+            <!-- END INBOX DROPDOWN -->
+            <!-- BEGIN TODO DROPDOWN -->
+            <li class="dropdown" id="header-tasks">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-tasks"></i>
+                    <span class="badge"></span>
+                </a>
+
+            </li>
+            <!-- END TODO DROPDOWN -->
+            <!-- BEGIN USER LOGIN DROPDOWN -->
+            <li class="dropdown user" id="header-user">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <img alt="" src="__PUBLIC__/admin/img/avatars/avatar3.jpg" />
+                    <span class="username">{$Think.session.name}</span>
+                    <i class="fa fa-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#"><i class="fa fa-user"></i> 修改资料</a></li>
+                    <li><a href="{:U('Login/logout')}"><i class="fa fa-power-off"></i> 退出登录</a></li>
+                </ul>
+            </li>
+            <!-- END USER LOGIN DROPDOWN -->
+        </ul>
+        <!-- END TOP NAVIGATION MENU -->
+    </div>
+
+    <!-- TEAM STATUS -->
+
+    <!-- /TEAM STATUS -->
+</header>
+<section id="page">

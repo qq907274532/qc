@@ -1,0 +1,144 @@
+<include file="Public/header"/><!--/HEADER -->
+<!--/HEADER -->
+
+<!-- PAGE -->
+
+<!-- SIDEBAR -->
+<include file="Public/menu"/><!--/HEADER -->
+<!-- /SIDEBAR -->
+<div id="main-content">
+    <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
+
+    <!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
+    <div class="container">
+        <div class="row">
+            <div id="content" class="col-lg-12">
+                <!-- PAGE HEADER-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <!-- STYLER -->
+
+                            <!-- /STYLER -->
+                            <!-- BREADCRUMBS -->
+                            <ul class="breadcrumb">
+                                <li>
+                                    <i class="fa fa-home"></i>
+                                    <a href="{:U('Index/index')}">首页</a>
+                                </li>
+                                <li>
+                                    <a href="{:U('AdminUser/index')}">管理员</a>
+                                </li>
+                                <li>修改管理员</li>
+                                <a href="{:U('AdminUser/index')}" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
+                            </ul>
+                            <div class="clearfix">
+
+                            </div>
+                            <!-- /BREADCRUMBS -->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /PAGE HEADER -->
+                <!-- SIMPLE STRIPED -->
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <!-- BOX -->
+                        <div class="box border primary">
+                            <div class="box-title">
+                                <h4><i class="fa fa-table"></i>修改管理员</h4>
+                                <div class="tools">
+
+                                    <a href="javascript:;" class="collapse">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="box-body big">
+                                <form class="form-horizontal" role="form" id="myForm">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">用户名：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="username" id="username"
+                                                    placeholder="用户名" value="{$info.username}" disabled >
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">邮箱：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="email" id="email"
+                                                    placeholder="邮箱" value="{$info.email}"  >
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">权限组：</label>
+
+                                        <div class="col-sm-4">
+                                            <select class="form-control" name="role_id" id="role">
+                                                <volist name="roleList" id="v">
+                                                    <option value="{$v.id}" <if condition="$info['role_id'] eq $v['id']">selected="selected"</if>>{$v.title}</option>
+                                                </volist>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-4 col-sm-6">
+                                             <input type="hidden" name="id" value="{$info.id}">
+                                            <div type="text" class="btn btn-primary" id="submit">提交</div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                        <!-- /BOX -->
+                    </div>
+                </div>
+
+                <!-- /BORDERED HOVER -->
+            </div>
+            <!--/HEADER -->
+            <include file="Public/footer"/>
+            <script type="text/javascript">
+                $(function(){
+                    $("#submit").click(function(){
+                        var id=$("input[name='id']").val();
+                        var email=$("input[name='email']").val();
+                        var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+                        var role=$("#role").val();
+                        if(!reg.test(email)){
+                            throwExc("邮箱格式不正确");
+                            return false;
+                        }
+
+                        if(role=='') {
+                            throwExc("请选择权限组");
+                            return false;
+                        }
+                        $.post("{:U('AdminUser/edit')}",{
+                            'role':role,
+                            'email':email,
+                            'id':id,
+                        },function( response ){
+                            if(response.error==100) {
+                                throwExc(response.message);
+                                return false;
+                            }else if(response.error==200) {
+                                showSucc(response.message);
+                                setTimeout("load()",1000);
+                            }
+                        },"json");
+                    });
+                });
+                function load(){
+                    window.location.href="{:U('AdminUser/index')}";
+                }
+            </script>

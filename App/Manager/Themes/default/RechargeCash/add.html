@@ -1,0 +1,204 @@
+<include file="Public/header"/><!--/HEADER -->
+<!--/HEADER -->
+
+<!-- PAGE -->
+
+<!-- SIDEBAR -->
+<include file="Public/menu"/><!--/HEADER -->
+<!-- /SIDEBAR -->
+<div id="main-content">
+    <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
+
+    <!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
+    <div class="container">
+        <div class="row">
+            <div id="content" class="col-lg-12">
+                <!-- PAGE HEADER-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <!-- STYLER -->
+
+                            <!-- /STYLER -->
+                            <!-- BREADCRUMBS -->
+                            <ul class="breadcrumb">
+                                <li>
+                                    <i class="fa fa-home"></i>
+                                    <a href="{:U('Index/index')}">首页</a>
+                                </li>
+                                <li>
+                                    <a href="{:U('RechargeCash/index')}">充值提现</a>
+                                </li>
+                                <li>添加申请</li>
+                                <a href="{:U('RechargeCash/index')}" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
+                            </ul>
+                            <div class="clearfix">
+
+                            </div>
+                            <!-- /BREADCRUMBS -->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /PAGE HEADER -->
+                <!-- SIMPLE STRIPED -->
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <!-- BOX -->
+                        <div class="box border primary">
+                            <div class="box-title">
+                                <h4><i class="fa fa-table"></i>添加申请</h4>
+                                <div class="tools">
+
+                                    <a href="javascript:;" class="collapse">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="box-body big">
+                                <form class="form-horizontal" role="form" id="myForm">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">会员名称：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="username" id="username" value=""
+                                                    placeholder="会员名称">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">金额：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="amount" id="amount"
+                                                    placeholder="金额" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">支付方式：</label>
+
+                                        <div class="col-sm-4">
+                                            <select class="form-control" name="payMent" id="payMent">
+                                                <volist name="payMent" id="v">
+                                                    <option value="{$v.pay_id}">{$v.pay_name}</option>
+                                                </volist>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">类型：</label>
+                                        <div class="col-sm-4">
+                                            <volist name="pay_type" id="v" >
+                                                <label class="radio-inline"> <input type="radio" class="process_type" name="process_type"  value="{$key}"> {$v} </label>
+                                            </volist>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">管理员的备注：</label>
+
+                                        <div class="col-sm-4">
+                                            <textarea class="form-control" rows="5" name="admin_note" id="admin_note" placeholder="管理员的备注"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">用户备注：</label>
+
+                                        <div class="col-sm-4">
+                                            <textarea class="form-control" rows="5" name="user_note" id="user_note" placeholder="用户备注"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">到款状态：</label>
+                                        <div class="col-sm-4">
+                                            <volist name="pay_status" id="v" >
+                                                <label class="radio-inline"> <input type="radio" class="is_paid" name="is_paid"  value="{$key}"> {$v} </label>
+                                            </volist>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-4 col-sm-6">
+
+                                            <div type="text" class="btn btn-primary" id="submit">提交</div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                        <!-- /BOX -->
+                    </div>
+                </div>
+
+                <!-- /BORDERED HOVER -->
+            </div>
+            <!--/HEADER -->
+            <include file="Public/footer"/>
+            <script type="text/javascript">
+                $(function(){
+                    $("#submit").click(function(){
+                        var username=$("input[name='username']").val();
+                        var amount=$("input[name='amount']").val();
+                        var process_type=$("input[name='process_type']:checked").val();
+                        var is_paid=$("input[name='is_paid']:checked").val();
+                        var payMent=$("#payMent").val();
+                        var admin_note=$("#admin_note").val();
+                        var user_note=$("#user_note").val();
+
+                        if($.trim(username)=='') {
+                            throwExc("用户名必须填写");
+                            return false;
+                        }
+                        if($.trim(amount)=='') {
+                            throwExc("金额必须填写");
+                            return false;
+                        }
+                        if($.trim(payMent)=='') {
+                            throwExc("支付方式必须选择");
+                            return false;
+                        }
+                        if($.trim(process_type)=='') {
+                            throwExc("类型必须选择");
+                            return false;
+                        }
+
+                        if($.trim(admin_note)=='') {
+                            throwExc("管理员备注必须填写");
+                            return false;
+                        }
+                        if($.trim(user_note)=='') {
+                            throwExc("用户备注必须填写");
+                            return false;
+                        }
+                        if($.trim(is_paid)=='') {
+                            throwExc("到款状态必须选择");
+                            return false;
+                        }
+
+                        $.post("{:U('RechargeCash/add')}",{
+                            'amount':amount,
+                            'process_type':process_type,
+                            'is_paid':is_paid,
+                            'username':username,
+                            'payMent':payMent,
+                            'admin_note':admin_note,
+                            'user_note':user_note,
+                        },function( response ){
+                            if(response.error==100) {
+                                throwExc(response.message);
+                                return false;
+                            }else if(response.error==200) {
+                                showSucc(response.message);
+                                setTimeout("load()",1000);
+                            }
+                        },"json");
+                    });
+                });
+                function load(){
+                    window.location.href="{:U('RechargeCash/index')}";
+                }
+            </script>

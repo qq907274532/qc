@@ -1,0 +1,178 @@
+
+<include file="Public/header"/><!--/HEADER -->
+<!-- Left side column. contains the logo and sidebar -->
+<include file="Public/menu"/>
+<!-- Content Wrapper. Contains page content -->
+
+<div class="content-wrapper">
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+
+        <ol class="breadcrumb pull-left">
+            <li ><i class="fa fa-dashboard"></i><span class="color:black">首页</span></li>
+            <li class="acive">
+                <a href="{:U('Link/index')}">友情链接</a>
+            </li>
+            <li class="acive">添加友链</li>
+        </ol>
+        <div class="clearfix pull-right">
+            <a href="{:U('Link/index')}" class="btn btn-primary "><i class="fa fa-arrow-left"></i>返回 </a>
+        </div>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+
+            <!--/.col (left) -->
+            <!-- right column -->
+            <div class="col-md-12">
+                <!-- Horizontal Form -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">添加角色</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form class="form-horizontal">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"> 公司名称： </label>
+
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="name" id="title" placeholder="公司名称"
+                                            value="">
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label "> 公司描述： </label>
+
+                                <div class=" col-xs-12 col-sm-4">
+                                                        <textarea class="form-control" rows="4" name="desc" id="descs"
+                                                                placeholder="描述"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label "> 公司链接： </label>
+
+                                <div class="col-sm-4">
+                                    <input type="text" id="url" placeholder="http://" class="form-control" name="url"/>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label "> 排序： </label>
+
+                                <div class="col-sm-4">
+                                    <input type="text" id="sort" placeholder="排序" class="form-control" name="sort" value="50"/>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right"
+                                        for="form-field-1"> 上传logo： </label>
+
+                                <div class="col-sm-4">
+                                    <input id="file_upload" name="imgPath" type="file" multiple="false">
+                                    <input type="hidden" name="img_url" value="" id="img_url">
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer ">
+                            <div class="col-sm-offset-3 col-sm-10">
+                                <div type="text" class="btn btn-primary" id="submit">提交</div>
+                            </div>
+                        </div>
+                        <!-- /.box-footer -->
+                    </form>
+                </div>
+                <!-- /.box -->
+                <!-- general form elements disabled -->
+
+                <!-- /.box -->
+            </div>
+            <!--/.col (right) -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+<!-- Control Sidebar -->
+
+<include file="Public/footer"/>
+ <script src="__PUBLIC__/uploadify/jquery.uploadify.min.js"></script>  
+ <link  src="__PUBLIC__/uploadify/uploadify.css"></link>  
+    <script type="text/javascript">
+        $(function() {
+            $('#file_upload').uploadify({
+                 'buttonText': '上传图片',
+                'swf'      : '__PUBLIC__/uploadify/uploadify.swf',
+                'uploader' : "{:U('Upload/index')}",
+                'fileObjName':"imgPath",
+                
+                'onUploadSuccess':function(file,data,response){
+                    var obj=$.parseJSON(data);
+                     if (obj.error == 200) {
+                            var url="{:C('BASE_URL')}"
+                             $("#file_upload").after("<div data-item='" + obj.image + "' class='" + obj.image + "_img' style='position: relative; margin-right:9px;max-width: 160px;display: inline-block; border: 1px solid #dddddd;'><span class='imgdel' onclick='imgdel(this)'></span><img src='"+url+obj.image+"' class='img-thumbnail imgHeigh'></div>");
+                             $('#' + file.id).find('.data').html(' 上传完毕');
+                            var imgsrc = $("#img_url").val();
+                            var imgsrcData;
+                            if (imgsrc != '') {
+                                imgsrcData = imgsrc + ',' + obj.image;
+                            }else{
+                                imgsrcData = obj.image;
+                            }
+                            $("#img_url").val(imgsrcData);
+                        } else {
+                            throwExc(obj.message);
+                        }
+                   
+                },
+            });
+        });
+    </script>
+<script type="text/javascript">
+    $(function(){
+        $("#submit").click(function(){
+            var title=$("input[name='title']").val();
+            var remark=$("#remark").val();
+            var status=$("#status").val();
+            if($.trim(title)=='') {
+                throwExc("角色名称必须填写");
+                return false;
+            }
+            if($.trim(remark)=='') {
+                throwExc("角色描述必须填写");
+                return false;
+            }
+
+
+            $.post("{:U('Role/add')}",{
+                "title":title,
+                'remark':remark,
+                'status':status,
+            },function( response ){
+                if(response.error==100) {
+                    throwExc(response.message);
+                    return false;
+                }else if(response.error==200) {
+                    showSucc(response.message);
+                    setTimeout("load()",1000);
+                }
+            },"json");
+        });
+    });
+    function load(){
+        window.location.href="{:U('Role/index')}";
+    }
+</script>

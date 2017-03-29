@@ -1,0 +1,223 @@
+<include file="Public/header"/><!--/HEADER -->
+<!--/HEADER -->
+<style type="text/css">
+
+    .wminimize:hover {
+        text-decoration: none;
+    }
+
+    .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+        padding: 8px;
+        line-height: 1.428571429;
+        vertical-align: top;
+        border-top: 0px solid #DDD;
+    }
+    .collapsed .expander{
+        background-image:url('/Public/admin/img/toggle-collapse-dark.png');
+    }
+    .expander .expander{
+        background-image:url('/Public/admin/img/toggle-expand-dark.png');
+    }
+
+</style>
+<!-- PAGE -->
+
+<!-- SIDEBAR -->
+<include file="Public/menu"/><!--/HEADER -->
+<!-- /SIDEBAR -->
+<div id="main-content">
+    <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
+
+    <!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
+    <div class="container">
+        <div class="row">
+            <div id="content" class="col-lg-12">
+                <!-- PAGE HEADER-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <!-- STYLER -->
+
+                            <!-- /STYLER -->
+                            <!-- BREADCRUMBS -->
+                            <ul class="breadcrumb">
+                                <li>
+                                    <i class="fa fa-home"></i>
+                                    <a href="{:U('Index/index')}">首页</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">内容管理</a>
+                                </li>
+                                <li>分类管理</li>
+                                <a href="{:U('Cate/add')}" class="btn btn-primary pull-right ">增加分类 <i class="fa fa-arrow-right"></i></a>
+                            </ul>
+                            <div class="clearfix">
+
+                            </div>
+                            <!-- /BREADCRUMBS -->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /PAGE HEADER -->
+                <!-- SIMPLE STRIPED -->
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <!-- BOX -->
+                        <div class="box border primary">
+                            <div class="box-title">
+                                <h4><i class="fa fa-table"></i>分类列表</h4>
+                                <div class="tools">
+
+                                    <a href="javascript:;" class="collapse">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="1" rowspan="1">编号</th>
+                                        <th >名称</th>
+                                        <th >排序</th>
+                                        <th >分类类型</th>
+                                        <th >状态</th>
+                                        <th >操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <volist name="list" id="val">
+                                        <tr  class="initialized parent collapsed expander" id="tr{$val.id}">
+                                            <td><span style="padding-left: 20px" <if condition="$val.show eq 1" > class="expander"</if>   onclick="tr_show({$val.id})"></span><span>{$val.id}</span></td>
+                                            <td >{$val.cat_name}</td>
+                                            <td >{$val.sort_order}</td>
+                                            <td >{$val.typeName}</td>
+                                            <td >
+                                                <if condition="$val.status eq Common\Model\ArticleCateModel::STATUS_ENABLE">
+                                                    <span class="label label-primary arrow-in adminstatus">{$val.statusName}</span>
+                                                <else />
+                                                    <span class="label label-danger arrow-in arrow-in-right adminstatus">{$val.statusName}</span>
+                                                </if >
+                                            </td>
+                                            <td >
+                                                <a href="{:U('Cate/edit',array('id'=>$val['id']))}" class="fa fa-pencil tip" data-original-title="修改" id="tr{$val.id}"></a>&nbsp;
+                                                <if condition="$val.status eq Common\Model\ArticleCateModel::STATUS_ENABLE">
+                                                    <a style="cursor: pointer;" class="fa fa-trash-o tip status" href="javascript:void(0);" data-original-title="禁用"></a>
+                                                 <else />
+                                                    <a style="cursor: pointer;" class="fa fa-trash-o tip status" href="javascript:void(0);" data-original-title="启用"></a>
+                                                </if >
+                                            </td>
+                                        </tr>
+                                        <volist name="val.child" id="vo">
+                                            <tr  class="initialized parent collapsed expander show{$val.id}" style="margin-left: 20px; display:none" id="tr{$vo.id}">
+                                                <td>
+                                                    <span style="padding-left: 20px;margin-left: 15px;" <if condition="$vo.show eq 1" > class="expander"</if>  onclick="tr_show({$vo.id})"></span><span>{$vo.id}</span>
+                                                </td>
+                                                <td >&nbsp;&nbsp;├─{$vo.cat_name}</td>
+                                                <td >{$vo.sort_order}</td>
+                                                <td >{$vo.typeName}</td>
+                                                <td >
+                                                    <if condition="$vo.status eq Common\Model\ArticleCateModel::STATUS_ENABLE">
+                                                        <span class="label label-primary arrow-in adminstatus">{$vo.statusName}</span>
+                                                     <else />
+                                                        <span class="label label-danger arrow-in arrow-in-right adminstatus">{$vo.statusName}</span>
+                                                    </if >
+                                                </td>
+                                                <td >
+                                                    <a href="{:U('Cate/edit',array('id'=>$vo['id']))}" class="fa fa-pencil tip" data-original-title="修改" id="tr{$vo.id}"></a>&nbsp;
+                                                    <if condition="$vo.status eq Common\Model\ArticleCateModel::STATUS_ENABLE">
+                                                        <a style="cursor: pointer;" class="fa fa-trash-o tip status" href="javascript:void(0);" data-original-title="禁用"></a>
+                                                    <else />
+                                                        <a style="cursor: pointer;" class="fa fa-trash-o tip status" href="javascript:void(0);" data-original-title="启用"></a>
+                                                    </if >
+
+                                                </td>
+                                            </tr>
+                                            <volist name="vo.child" id="v">
+                                                <tr  class="initialized parent collapsed expander show{$vo.id}" style="margin-left: 20px; display:none" id="tr{$v.id}">
+                                                    <td><span style="padding-left: 20px;margin-left: 15px;" <if condition="$v.show eq 1" > class="expander"</if> onclick="tr_show({$v.id})""></span><span>{$v.id}</span></td>
+                                                    <td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  └─ {$v.cat_name}</td>
+                                                    <td >{$v.sort_order}</td>
+                                                    <td >{$v.typeName}</td>
+                                                    <td >
+                                                        <if condition="$v.status eq Common\Model\ArticleCateModel::STATUS_ENABLE">
+                                                            <span class="label label-primary arrow-in adminstatus">{$v.statusName}</span>
+                                                        <else />
+                                                            <span class="label label-danger arrow-in arrow-in-right adminstatus">{$v.statusName}</span>
+                                                        </if >
+                                                    </td>
+                                                    <td ><a href="{:U('Cate/edit',array('id'=>$v['id']))}"
+                                                            class="fa fa-pencil tip" data-original-title="修改" id="tr{$v.id}"></a>&nbsp;
+                                                        <if condition="$v.status eq Common\Model\ArticleCateModel::STATUS_ENABLE">
+                                                            <a href="javascript:void(0);" style="cursor: pointer;" class="fa fa-trash-o tip status" data-original-title="禁用"></a>
+                                                         <else />
+                                                            <a href="javascript:void(0);" style="cursor: pointer;" class="fa fa-trash-o tip status" data-original-title="启用"></a>
+                                                        </if >
+
+                                                    </td>
+                                                </tr>
+                                            </volist>
+                                        </volist>
+                                    </volist>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <!-- /BOX -->
+                    </div>
+                </div>
+
+                <!-- /BORDERED HOVER -->
+            </div>
+            <!--/HEADER -->
+            <include file="Public/footer"/>
+            <script type="text/javascript">
+                $(function(){
+                    $(".status").click(function(){
+                        var parent=$(this).parent().parent()
+                        var id=parent.find('td:first span').eq(1).html();
+                        var msg=$(this).attr("data-original-title");
+                        if(msg=="启用") {
+                            status="<?=Common\Model\ArticleCateModel::STATUS_DISABLE?>";
+                        }else {
+                            status="<?=Common\Model\ArticleCateModel::STATUS_ENABLE?>";
+                        }
+                        layer.confirm('你确定要'+msg+"吗？",{
+                            btn:[ '确认','取消' ] //按钮
+                        },function(){
+                            $.post("{:U('Cate/del')}",{ "id":id,"status":status },function( response ){
+                                if(response.error==100) {
+                                    throwExc(response.message);
+                                    return false;
+                                }else if(response.error==200) {
+                                    showSucc(response.message);
+                                    setTimeout("location.reload()",1000);
+                                }else {
+                                    throwExc(response.info);
+                                    return false;
+                                }
+                            },"json");
+
+                        },function(){
+                            layer.msg('取消成功',{
+                                time:800, //20s后自动关闭
+                            });
+                        });
+
+                    });
+                })
+                function load(){
+                    location.reload() ;
+                }
+
+
+                function tr_show(data){
+                    var show= $('.show'+data);
+                    $("#tr"+data).toggleClass('expander');
+                    show.toggle();
+                }
+            </script>

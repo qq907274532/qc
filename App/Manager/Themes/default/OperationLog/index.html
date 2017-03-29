@@ -1,0 +1,149 @@
+<include file="Public/header"/><!--/HEADER -->
+<!--/HEADER -->
+
+<!-- PAGE -->
+
+<!-- SIDEBAR -->
+<include file="Public/menu"/><!--/HEADER -->
+<!-- /SIDEBAR -->
+<div id="main-content">
+    <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
+
+    <!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
+    <div class="container">
+        <div class="row">
+            <div id="content" class="col-lg-12">
+                <!-- PAGE HEADER-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <!-- STYLER -->
+
+                            <!-- /STYLER -->
+                            <!-- BREADCRUMBS -->
+                            <ul class="breadcrumb">
+                                <li>
+                                    <i class="fa fa-home"></i>
+                                    <a href="{:U('Index/index')}">首页</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">日志管理</a>
+                                </li>
+                                <li>操作日志</li>
+                               
+                            </ul>
+                            <div class="clearfix">
+
+                            </div>
+                            <!-- /BREADCRUMBS -->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /PAGE HEADER -->
+                <!-- SIMPLE STRIPED -->
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <!-- BOX -->
+                        <div class="box border primary">
+                            <div class="box-title">
+                                <h4><i class="fa fa-table"></i>日志列表</h4>
+                                <div class="tools">
+
+                                    <a href="javascript:;" class="collapse">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+
+                                        <th>操作人</th>
+                                        <th>Module</th>
+                                        <th>Controller</th>
+                                        <th>Action</th>
+                                        <th class="hidden-480">POST</th>
+                                        <th class="hidden-480">GET</th>
+                                        <th>创建时间</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <volist name="data.list" id="v">
+                                        <tr>
+                                           
+                                            <td><span class="badge badge-purple">{$v.userName}</span></td>
+                                            <td>{$v.module}</td>
+                                            <td>{$v.controller}</td>
+                                            <td>{$v.action}</td>
+                                            <td class="hidden-480"> {$v.post_value}</td>
+                                            <td class="hidden-480">{$v.get_value}</td>
+                                            <td class="hidden-480">{$v.create_time}</td>
+                                        </tr>
+                                        </volist>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-6 pull-right">
+                                <div class="dataTables_paginate paging_bootstrap ">
+                                    <ul class="pagination ">
+                                        {$data.page}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /BOX -->
+                    </div>
+                </div>
+
+                <!-- /BORDERED HOVER -->
+            </div>
+            <!--/HEADER -->
+            <include file="Public/footer"/>
+            <script type="text/javascript">
+                $(".checkStatus").click(function(){
+                    var id=$(this).parent().parent().find("td:eq(0)").html();
+                    var msg=$(this).attr("data-original-title");
+                    var status;
+                    if(msg=='禁用') {
+                        status=1;
+                    }else {
+                        status=2;
+                    }
+                    layer.confirm('你确定要'+msg+"吗？", {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        $.ajax({
+                            url: "{:U('AdminUser/del')}",
+                            type: "POST",
+                            data :{ "id":id,"status":status },
+                            dataType: "json",
+                            success:function(response){
+                                if(response.error==100) {
+                                    throwExc(response.message);
+                                    return false;
+                                }else if(response.error==200){
+                                    showSucc(response.message);
+                                    setTimeout("load()",1000);
+                                }
+                            },
+                            error:function(response){
+                                throwExc(response.responseText);
+                                return false;
+                            }
+                        })
+                    }, function(){
+                        layer.msg('取消操作', {
+                            time: 800, //20s后自动关闭
+                        });
+                    });
+
+                });
+
+                function load(){
+                    location.reload() ;
+                }
+            </script>

@@ -1,0 +1,186 @@
+<include file="Public/header"/><!--/HEADER -->
+<!--/HEADER -->
+
+<!-- PAGE -->
+
+<!-- SIDEBAR -->
+<include file="Public/menu"/><!--/HEADER -->
+<!-- /SIDEBAR -->
+<div id="main-content">
+    <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
+
+    <!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
+    <div class="container">
+        <div class="row">
+            <div id="content" class="col-lg-12">
+                <!-- PAGE HEADER-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <!-- STYLER -->
+
+                            <!-- /STYLER -->
+                            <!-- BREADCRUMBS -->
+                            <ul class="breadcrumb">
+                                <li>
+                                    <i class="fa fa-home"></i>
+                                    <a href="{:U('Index/index')}">首页</a>
+                                </li>
+                                <li>
+                                    <a href="{:U('Node/index')}">节点管理</a>
+                                </li>
+                                <li>添加节点</li>
+                                <a href="{:U('Node/index')}" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
+                            </ul>
+                            <div class="clearfix">
+
+                            </div>
+                            <!-- /BREADCRUMBS -->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /PAGE HEADER -->
+                <!-- SIMPLE STRIPED -->
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <!-- BOX -->
+                        <div class="box border primary">
+                            <div class="box-title">
+                                <h4><i class="fa fa-table"></i>添加节点</h4>
+                                <div class="tools">
+
+                                    <a href="javascript:;" class="collapse">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="box-body big">
+                                <form class="form-horizontal" role="form" id="myForm">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">请选择父级：</label>
+
+                                        <div class="col-sm-4">
+                                            <select class="form-control" name="parent_id" id="parent_id">
+                                                <option value="0">请选择父级</option>
+                                                <volist name="list" id="v">
+                                                    <option value="{$v.id}">{$v.title}</option>
+                                                    <volist name="v.child" id="vo">
+                                                        <option value="{$vo.id}">&nbsp;└-{$vo.title}
+                                                        </option>
+                                                    </volist>
+                                                </volist>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">规则名称：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="title" id="title" placeholder="规则名称"
+                                                    value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">规则标识：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="name" id="name"
+                                                    placeholder="模块/控制器/方法" value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">URL：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="url" id='url' value=""
+                                                    placeholder="控制器/方法">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">ICON图标：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="icon" id='icon' value=""
+                                                    placeholder="fa-camera">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">排序：</label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="sort" id='icon' value="50">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">是否是菜单：</label>
+
+                                        <div class="col-sm-4">
+                                            <select class="form-control" name="menu" id="menu">
+                                               <volist name="menu" id="val" key="k">
+                                                <option value="{$k}" >{$val}</option>
+                                             </volist>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-4 col-sm-6">
+
+                                            <div type="text" class="btn btn-primary" id="submit">提交</div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                        <!-- /BOX -->
+                    </div>
+                </div>
+
+                <!-- /BORDERED HOVER -->
+            </div>
+            <!--/HEADER -->
+            <include file="Public/footer"/>
+            <script type="text/javascript">
+                $(function(){
+                    $("#submit").click(function(){
+                        var name=$("input[name='name']").val();
+                        var title=$("input[name='title']").val();
+                        var url=$("input[name='url']").val();
+                        var status=$("#status").val();
+                        if($.trim(name)=='') {
+                            throwExc("规则标识必须填写");
+                            return false;
+                        }
+                        if($.trim(title)=='') {
+                            throwExc("规则名称必须填写");
+                            return false;
+                        }
+                        if($.trim(url)=='') {
+                            throwExc("URL必须填写");
+                            return false;
+                        }
+
+                        $.post("{:U('Node/add')}",$("#myForm").serialize(),function( response ){
+                            if(response.error==100) {
+                                throwExc(response.msg);
+                                return false;
+                            }else if(response.error==200) {
+                                showSucc(response.msg);
+                                setTimeout("load()",1000);
+                            }
+                        },"json");
+                    });
+                });
+                function load(){
+                    window.location.href="{:U('Node/index')}";
+                }
+            </script>

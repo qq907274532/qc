@@ -1,0 +1,110 @@
+<include file="Public/header"/><!--/HEADER -->
+<!-- Left side column. contains the logo and sidebar -->
+<include file="Public/menu"/>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+
+        <ol class="breadcrumb pull-left">
+            <li ><i class="fa fa-dashboard"></i><span class="color:black">首页</span></li>
+            <li class="active">
+                <a href="#">基本管理</a>
+            </li>
+            <li class="active">友情链接</li>
+        </ol>
+        <div class="clearfix pull-right">
+            <a href="{:U('Link/add')}" class="btn btn-primary ">增加链接 <i class="fa fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">友情链接</h3>
+
+                        <div class="box-tools">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">名称</th>
+                                <th class="text-center">图片</th>
+                                <th class="text-center">排序</th>
+                                <th class="text-center">创建时间</th>
+                                <th class="text-center">修改时间</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <volist name="data.list" id="v">
+                                <tr class="text-center">
+                                    <td>{$v.id}</td>
+                                    <td>{$v.name}</td>
+                                    <td ><img width="200" height ="90" src="{$v.image}"></td>
+                                    <td >{$v.sort}</td>
+                                    <td>{$v.create_time}</td>
+                                    <td >{$v.update_time}</td>
+                                    <td>
+                                        <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+                                            <a href="{:U('Role/edit',array('id'=>$v['id']))}" class="fa fa-pencil tip" data-toggle="tooltip" title="编辑"></a>
+                                            <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-toggle="tooltip" title="删除"> </a>
+                                        </div>
+
+
+                                    </td>
+                                </tr>
+                            </volist>
+
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+        <!-- /.row -->
+
+    </section>
+    <!-- /.content -->
+</div>
+
+
+<!-- Control Sidebar -->
+
+<include file="Public/footer"/>
+
+<script type="text/javascript">
+    $(".checkStatus").click(function(){
+        var id=$(this).parent().parent().parent().find("td:eq(0)").html();
+        if(confirm("你确定要删除吗？")) {
+            $.post("{:U('Link/del')}",{ "id":id},function( response ){
+                if(response.error==100) {
+                    throwExc(response.message);
+                    return false;
+                }else if(response.error==200) {
+                    showSucc(response.message);
+                    setTimeout("load()",1000);
+                }else{
+                    throwExc(response.info);
+                    return false;
+                }
+            },"json");
+        }else {
+            return false;
+        }
+    });
+
+    function load(){
+        window.location.href="{:U('Link/index')}";
+    }
+</script>

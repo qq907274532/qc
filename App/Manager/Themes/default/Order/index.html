@@ -1,0 +1,198 @@
+<include file="Public/header"/><!--/HEADER -->
+<!--/HEADER -->
+
+<!-- PAGE -->
+
+<!-- SIDEBAR -->
+<include file="Public/menu"/><!--/HEADER -->
+<!-- /SIDEBAR -->
+<div id="main-content">
+    <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
+
+    <!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
+    <div class="container">
+        <div class="row">
+            <div id="content" class="col-lg-12">
+                <!-- PAGE HEADER-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <!-- STYLER -->
+
+                            <!-- /STYLER -->
+                            <!-- BREADCRUMBS -->
+                            <ul class="breadcrumb">
+                                <li>
+                                    <i class="fa fa-home"></i>
+                                    <a href="{:U('Index/index')}">首页</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">订单管理</a>
+                                </li>
+                                <li class="active">订单列表</li>
+                                <!--<a href="{:U('Role/add')}" class="btn btn-primary pull-right "> <i class="fa fa-arrow-right"></i></a>-->
+                            </ul>
+                            <div class="clearfix">
+                                 <form action=""  class="form-horizontal" method="get">
+                              
+                                        
+                                    <div  class="col-sm-12">
+                                        <div class="form-group col-sm-3">
+                                            <label class=" col-sm-4 control-label ">订单号：</label>
+
+                                            <div class="col-sm-8">
+
+                                                <input type="text" class="col-sm-12 form-control"  placeholder="订单号" name="order_num" id="order_num"
+                                                        value="{$Think.get.order_num}">
+                                                </div>
+
+                                        </div>
+                                        <div class="form-group col-sm-3" >
+                                            <label class=" control-label col-sm-4" >收货人：</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control col-sm-12"  placeholder="收货人" id="username" name="username"  value="{$Think.get.username}">
+                                                </div>
+
+                                        </div>
+                                        <div class="form-group col-sm-3" >
+                                            <label class=" control-label col-sm-4">订单状态：</label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control" name="order_status" id="order_status">
+                                                    <option value="0">请选择</option>
+                                                    <volist name="list" id="v" key="k">
+                                                        <option value="{$k}" <if condition="$Think.get.order_status eq $k">selected=selected</if> >{$v}</option>
+                                                    </volist>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                      
+                                            <div class="col-sm-1">
+                                                <div class="col-sm-offset-1 col-sm-10">
+                                                    <button class="btn btn-primary" type="submit">搜索</button>
+                                                </div>
+                                            </div>
+                                          
+                                        </div>
+                                    </form>
+                            </div>
+                            <!-- /BREADCRUMBS -->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /PAGE HEADER -->
+                <!-- SIMPLE STRIPED -->
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <!-- BOX -->
+                        <div class="box border primary">
+
+                            <div class="box-title">
+                                <h4><i class="fa fa-table"></i>会员列表</h4>
+                                <div class="tools">
+
+                                    <a href="javascript:;" class="collapse">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>订单号</th>
+                                        <th>收货人</th>
+                                        <th>总金额</th>
+                                        <th>应付金额</th>
+                                        <th>下单时间</th>
+                                        <th>订单状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <volist name="data.list" id="v">
+                                        <tr>
+                                            <td>{$v.order_id}</td>
+                                            <td>{$v.order_sn}</td>
+                                            <td>{$v.consignee}</td>
+                                            <td>{$v.goods_amount}</td>
+                                            <td>{$v.order_amount}</td>
+                                            <td class="hidden-480">{$v.create_time}</td>
+                                            <td>
+                                                <if condition="$v.status neq Common\Model\OrderInfoModel::ORDER_TRANSACTION_CANCELLATION">
+                                                    <span class="label label-primary arrow-in">{$v.orderStatusName}</span>
+                                                    <else/>
+                                                    <span class="label  label-danger arrow-out ">{$v.statusName}</span>
+                                                </if>
+                                            </td>
+
+                                            <td>
+                                                    <a href="{:U('Users/receiptAddress',array('id'=>$v['id']))}" class="fa  fa-bullseye tip " data-original-title="收货地址" > </a>
+                                                    <a href="{:U('Users/accountDetails',array('id'=>$v['id']))}" class="fa fa-hdd-o tip " data-original-title="账目明细" > </a>
+
+                                                <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="删除"> </a>
+                                            </td>
+                                        </tr>
+                                        </volist>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-6 pull-right">
+                                <div class="dataTables_paginate paging_bootstrap ">
+                                    <ul class="pagination ">
+                                        {$data.page}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /BOX -->
+                    </div>
+                </div>
+
+                <!-- /BORDERED HOVER -->
+            </div>
+            <!--/HEADER -->
+            <include file="Public/footer"/>
+          <script type="text/javascript">
+
+    $(".checkStatus").click(function(){
+        var id=$(this).parent().parent().find("td:eq(0)").html();
+       
+        layer.confirm("你确定要删除订单吗？", {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            $.ajax({
+                url: "{:U('Order/del')}",
+                type: "POST",
+                data :{ "id":id},
+                dataType: "json",
+                success:function(response){
+                    if(response.error==100) {
+                        throwExc(response.message);
+                        return false;
+                    }else if(response.error==200){
+                        showSucc(response.message);
+                        setTimeout("load()",1000);
+                    }
+                },
+                error:function(response){
+                    throwExc(response.responseText);
+                    return false;
+                }
+            })
+        }, function(){
+            layer.msg('取消操作', {
+                time: 800, //20s后自动关闭
+            });
+        });
+
+    });
+
+    function load(){
+        location.reload() ;
+    }
+</script>

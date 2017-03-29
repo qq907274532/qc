@@ -1,0 +1,173 @@
+<include file="Public/header"/><!--/HEADER -->
+<!--/HEADER -->
+
+<!-- PAGE -->
+
+<!-- SIDEBAR -->
+<include file="Public/menu"/><!--/HEADER -->
+<!-- /SIDEBAR -->
+<div id="main-content">
+    <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
+
+    <!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
+    <div class="container">
+        <div class="row">
+            <div id="content" class="col-lg-12">
+                <!-- PAGE HEADER-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <!-- STYLER -->
+
+                            <!-- /STYLER -->
+                            <!-- BREADCRUMBS -->
+                            <ul class="breadcrumb">
+                                <li>
+                                    <i class="fa fa-home"></i>
+                                    <a href="{:U('Index/index')}">首页</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">会员管理</a>
+                                </li>
+                                <li class="active">留言列表</li>
+                                <!--<a href="{:U('Role/add')}" class="btn btn-primary pull-right "> <i class="fa fa-arrow-right"></i></a>-->
+                            </ul>
+                            <div class="clearfix">
+                                 <form action=""  class="form-horizontal" method="get">
+                                     <input type="hidden" name="m" value="Feedback">
+                                    <input type="hidden" name="c" value="index">
+                                        
+                                    <div  class="col-sm-12">
+                                        <div class=" form-group col-sm-4 ">
+                                            <label class=" control-label col-sm-4">留言标题：</label>
+
+                                            <div class="col-sm-8">
+
+                                                <input type="text" class="col-sm-12 form-control"  placeholder="留言标题" name="title" id="title"
+                                                        value="{$Think.get.title}">
+                                                </div>
+
+                                        </div>
+
+                                            <div class="col-sm-2">
+                                                <div class="col-sm-offset-1 col-sm-10">
+                                                    <button class="btn btn-primary" type="submit">搜索</button>
+                                                </div>
+                                            </div>
+                                          
+                                        </div>
+                                    </form>
+                            </div>
+                            <!-- /BREADCRUMBS -->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /PAGE HEADER -->
+                <!-- SIMPLE STRIPED -->
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <!-- BOX -->
+                        <div class="box border primary">
+
+                            <div class="box-title">
+                                <h4><i class="fa fa-table"></i>留言</h4>
+                                <div class="tools">
+
+                                    <a href="javascript:;" class="collapse">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>用户名</th>
+                                        <th>留言标题</th>
+                                        <th>类型</th>
+                                        <th>留言时间</th>
+                                        <th>回复</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <volist name="data.list" id="v">
+                                        <tr>
+                                            <td>{$v.msg_id}</td>
+                                            <td>{$v.user_name}</td>
+                                            <td>{$v.msg_title}</td>
+                                            <td>{$v.msg_type_name}</td>
+                                            <td>{$v.msg_time}</td>
+                                            <td>
+                                                <span class="label label-primary arrow-in">{$v.is_replay}</span>
+
+                                            </td>
+                                            <td>
+                                                <a href="{:U('Feedback/info',array('id'=>$v['msg_id']))}" class="fa fa-hdd-o tip " data-original-title="查看详情" > </a>
+                                                <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="删除"> </a>
+                                            </td>
+                                        </tr>
+                                        </volist>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-6 pull-right">
+                                <div class="dataTables_paginate paging_bootstrap ">
+                                    <ul class="pagination ">
+                                        {$data.page}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /BOX -->
+                    </div>
+                </div>
+
+                <!-- /BORDERED HOVER -->
+            </div>
+            <!--/HEADER -->
+            <include file="Public/footer"/>
+          <script type="text/javascript">
+
+    $(".checkStatus").click(function(){
+        var id=$(this).parent().parent().find("td:eq(0)").html();
+        var msg=$(this).attr("data-original-title");
+
+        layer.confirm('你确定要'+msg+"吗？", {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            $.ajax({
+                url: "{:U('Feedback/del')}",
+                type: "POST",
+                data :{ "id":id },
+                dataType: "json",
+                success:function(response){
+                    if(response.error==100) {
+                        throwExc(response.message);
+                        return false;
+                    }else if(response.error==200){
+                        showSucc(response.message);
+                        setTimeout("load()",1000);
+                    }
+                },
+                error:function(response){
+                    throwExc(response.responseText);
+                    return false;
+                }
+            })
+        }, function(){
+            layer.msg('取消操作', {
+                time: 800, //20s后自动关闭
+            });
+        });
+
+    });
+
+    function load(){
+        location.reload() ;
+    }
+</script>

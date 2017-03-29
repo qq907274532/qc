@@ -1,0 +1,40 @@
+<div id="sidebar" class="sidebar">
+    <div class="sidebar-menu nav-collapse">
+        <div class="divide-20"></div>
+        <!-- SEARCH BAR -->
+        <div id="search-bar">
+            <input class="search" type="text" placeholder="Search"><i class="fa fa-search search-icon"></i>
+        </div>
+        <!-- /SEARCH BAR -->
+
+        <!-- SIDEBAR QUICK-LAUNCH -->
+        <!-- <div id="quicklaunch">
+        <!-- /SIDEBAR QUICK-LAUNCH -->
+
+        <!-- SIDEBAR MENU -->
+        <ul>
+            <li <if condition=" CONTROLLER_NAME eq 'Index'"> class="active"</if>>
+                <a href="{:U('Index/index')}">
+                    <i class="fa fa-home"></i> <span class="menu-text">首页</span> <span class="selected"></span>
+                </a>
+            </li>
+            <volist name="menus" id="vo">
+                <li <if condition="$openFirstId eq $vo['id']" > class="has-sub active" <else/> class="has-sub" </if>>
+                    <a href="javascript:;" class=""> <i class="fa {$vo.icon}"></i> <span class="menu-text">{$vo.title}</span>
+                        <span <if condition="$openFirstId eq $vo['id']"> class="arrow open"<else/>class="arrow"</if>></span>
+                    </a>
+                <ul class="sub">
+                    <volist name="vo.child" id="v">
+                        <li <if condition="$v['id'] eq $open"> class="current"</if> >
+                         <a class="" href="{$v.urls}"><span class="sub-menu-text">{$v.title}</span></a>
+                        </li>
+                    </volist>
+                </ul>
+                </li>
+            </volist>
+
+
+        </ul>
+        <!-- /SIDEBAR MENU -->
+    </div>
+</div>
