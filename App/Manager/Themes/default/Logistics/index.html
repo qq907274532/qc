@@ -27,10 +27,10 @@
                                     <a href="{:U('Index/index')}">首页</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">会员管理</a>
+                                    <a href="javascript:void(0)">基本设置</a>
                                 </li>
-                                <li>会员列表</li>
-                              
+                                <li>物流管理</li>
+                                <a href="{:U('Logistics/add')}" class="btn btn-primary pull-right ">增加物流 <i class="fa fa-arrow-right"></i></a>
                             </ul>
                             <div class="clearfix">
 
@@ -48,7 +48,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>会员列表</h4>
+                                <h4><i class="fa fa-table"></i>物流列表</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -61,14 +61,9 @@
                                 <table class="table table-striped">
                                     <thead>
                                     <tr>
-                                       
-                                        <th>会员名称</th>
-                                        <th>邮箱</th>
-                                        <th>现有资金</th>
-                                        <th>冻结资金</th>
+                                        <th>ID</th>
+                                        <th>物流名称</th>
                                         <th>状态</th>
-                                        <th>最后一次登录时间</th>
-                                        <th>最后一次登录IP</th>
                                         <th class="hidden-480">创建时间</th>
                                         <th class="hidden-480">更新时间</th>
                                         <th>操作</th>
@@ -77,24 +72,23 @@
                                     <tbody>
                                     <volist name="data.list" id="v">
                                         <tr>
-                                            <td>{$v.user_name}</td>
-                                            <td>{$v.email}</td>
-                                            <td>{$v.user_money}</td>
-                                            <td>{$v.frozen_money}</td>
+                                            <td>{$v.id}</td>
+                                            <td>{$v.name}</td>
                                             <td>
-                                                <if condition="$v.status eq Common\Model\UserModel::STATUS_ENABLE">
+                                                <if condition="$v.status eq Common\Model\ShipperModel::STATUS_ENABLE">
                                                     <span class="label label-primary arrow-in">{$v.statusName}</span>
                                                     <else/>
                                                     <span class="label  label-danger arrow-out ">{$v.statusName}</span>
                                                 </if>
                                             </td>
-                                            <td>{$v.last_login}</td>
-                                            <td>{$v.last_ip}</td>
+
                                             <td class="hidden-480">{$v.create_time}</td>
                                             <td class="hidden-480">{$v.update_time}</td>
                                             <td>
-                                             <input type="hidden" name="id" value="{$v.user_id}" id="user_id">
-                                              <if condition="$v.status eq Common\Model\UserModel::STATUS_ENABLE">
+                                             
+                                              <a href="{:U('Logistics/edit',array('id'=>$v['id']))}" class="fa fa-pencil tip" data-original-title="修改"></a>
+
+                                              <if condition="$v.status eq Common\Model\ShipperModel::STATUS_ENABLE">
                                                 <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
                                                <else/>
                                                 <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a>
@@ -123,19 +117,19 @@
             <include file="Public/footer"/>
             <script type="text/javascript">
                 $(".checkStatus").click(function(){
-                    var id=$(this).prev().val();
+                    var id=$(this).parent().parent().find("td:eq(0)").html();
                     var msg=$(this).attr("data-original-title");
                     var status;
-                    if(msg=='禁用') {
-                        status=1;
+                    if(msg=="启用") {
+                        status="<?=Common\Model\ShipperModel::STATUS_DISABLE?>";
                     }else {
-                        status=2;
+                        status="<?=Common\Model\ShipperModel::STATUS_ENABLE?>";
                     }
                     layer.confirm('你确定要'+msg+"吗？", {
                         btn: ['确定','取消'] //按钮
                     }, function(){
                         $.ajax({
-                            url: "{:U('User/del')}",
+                            url: "{:U('Logistics/del')}",
                             type: "POST",
                             data :{ "id":id,"status":status },
                             dataType: "json",
