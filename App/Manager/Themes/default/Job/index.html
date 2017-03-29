@@ -1,0 +1,168 @@
+<include file="Public/header"/><!--/HEADER -->
+<!--/HEADER -->
+
+<!-- PAGE -->
+
+<!-- SIDEBAR -->
+<include file="Public/menu"/><!--/HEADER -->
+<!-- /SIDEBAR -->
+<div id="main-content">
+    <!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
+
+    <!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->
+    <div class="container">
+        <div class="row">
+            <div id="content" class="col-lg-12">
+                <!-- PAGE HEADER-->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-header">
+                            <!-- STYLER -->
+
+                            <!-- /STYLER -->
+                            <!-- BREADCRUMBS -->
+                            <ul class="breadcrumb">
+                                <li>
+                                    <i class="fa fa-home"></i>
+                                    <a href="{:U('Index/index')}">首页</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">招聘管理</a>
+                                </li>
+                                <li>职位列表</li>
+                                <a href="{:U('Job/add')}" class="btn btn-primary pull-right ">增加职位 <i class="fa fa-arrow-right"></i></a>
+                            </ul>
+                            <div class="clearfix">
+
+                            </div>
+                            <!-- /BREADCRUMBS -->
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /PAGE HEADER -->
+                <!-- SIMPLE STRIPED -->
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <!-- BOX -->
+                        <div class="box border primary">
+                            <div class="box-title">
+                                <h4><i class="fa fa-table"></i>职位列表</h4>
+                                <div class="tools">
+
+                                    <a href="javascript:;" class="collapse">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>职位名称</th>
+                                        <th>职位类别</th>
+                                        <th>招聘人数</th>
+                                        <th>工作地点</th>
+                                        <th class="hidden-480">截止时间</th>
+                                        <th class="hidden-480">创建时间</th>
+                                        <th class="hidden-480">更新时间</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <volist name="data.list" id="v">
+                                        <tr>
+                                            <td>{$v.id}</td>
+                                            <td>{$v.title}</td>
+                                            <td>{$v.typeName}</td>
+                                            <td>{$v.num}</td>
+                                            <td>{$v.address}</td>
+                                            <td class="hidden-480">{$v.endtime}</td>
+                                            <td class="hidden-480">{$v.create_time}</td>
+                                            <td class="hidden-480">{$v.update_time}</td>
+                                            <td>
+                                                <if condition="$v.status eq Common\Model\JobModel::STATUS_ENABLE">
+                                                    <span class="label label-primary arrow-in">{$v.statusName}</span>
+                                                    <else/>
+                                                    <span class="label  label-danger arrow-out ">{$v.statusName}</span>
+                                                </if>
+                                            </td>
+                                            <td>
+
+                                              <a href="{:U('Job/edit',array('id'=>$v['id']))}" class="fa fa-pencil tip" data-original-title="修改"></a>
+
+                                              <if condition="$v.status eq Common\Model\JobModel::STATUS_ENABLE">
+                                                <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
+                                               <else/>
+                                                <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a>
+                                                </if>
+                                            </td>
+                                        </tr>
+                                        </volist>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-6 pull-right">
+                                <div class="dataTables_paginate paging_bootstrap ">
+                                    <ul class="pagination ">
+                                        {$data.page}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /BOX -->
+                    </div>
+                </div>
+
+                <!-- /BORDERED HOVER -->
+            </div>
+            <!--/HEADER -->
+            <include file="Public/footer"/>
+            <script type="text/javascript">
+                $(".checkStatus").click(function(){
+                    var id=$(this).parent().parent().find("td:eq(0)").html();
+                    var msg=$(this).attr("data-original-title");
+                    var status;
+                    if(msg=="启用") {
+                        status="<?=Common\Model\JobModel::STATUS_DISABLE?>";
+                    }else {
+                        status="<?=Common\Model\JobModel::STATUS_ENABLE?>";
+                    }
+                    layer.confirm('你确定要'+msg+"吗？", {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        $.ajax({
+                            url: "{:U('Job/del')}",
+                            type: "POST",
+                            data :{ "id":id,"status":status },
+                            dataType: "json",
+                            success:function(response){
+                                if(response.error==100) {
+                                    throwExc(response.message);
+                                    return false;
+                                }else if(response.error==200){
+                                    showSucc(response.message);
+                                    setTimeout("load()",1000);
+                                }
+                            },
+                            error:function(response){
+                                throwExc(response.responseText);
+                                return false;
+                            }
+                        })
+                    }, function(){
+                        layer.msg('取消操作', {
+                            time: 800, //20s后自动关闭
+                        });
+                    });
+
+                });
+
+                function load(){
+                    location.reload() ;
+                }
+            </script>

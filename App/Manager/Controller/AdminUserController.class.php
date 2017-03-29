@@ -1,10 +1,8 @@
 <?php
     namespace Manager\Controller;
-
     use Manager\Model\AdminUserModel;
     use Manager\Model\AuthGroupAccessModel;
     use Manager\Model\AuthGroupModel;
-    use Manager\Model\AuthRuleModel;
 
     class AdminUserController extends AdminBaseController
     {
@@ -65,8 +63,8 @@
                 }
 
             } else {
-                $authGroupModel = new AuthRuleModel();
-                $this->assign('roleList', $authGroupModel->getAuthRuleList(['id' => 'desc'], ['status' => AuthGroupModel::STATUS_ENABLE]));
+                $authGroupModel = new AuthGroupModel();
+                $this->assign('roleList', $authGroupModel->getAuthGroupList(['id' => 'desc'], ['status' => AuthGroupModel::STATUS_ENABLE]));
                 $this->display();
             }
         }

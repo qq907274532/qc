@@ -1,6 +1,7 @@
 <?php
     namespace Manager\Controller;
 
+    use Common\Model\LoginLogModel;
     use Manager\Model\AdminUserModel;
     use Think\Controller;
 
@@ -46,7 +47,8 @@
                     'last_time' => date('Y-m-d H:i:s', time()),
                     'last_ip' => $_SERVER['REMOTE_ADDR'],
                 );
-
+                $LoginLogModel= new LoginLogModel();
+                $LoginLogModel->addLog($userInfoDetail['id'],get_client_ip(),$userInfoDetail['username'].'登陆成功');
                 $this->model->where(array('id' => $userInfoDetail['id']))->save($data);
                 session('id', $userInfoDetail['id']);
                 session('name', $userInfoDetail['username']);
