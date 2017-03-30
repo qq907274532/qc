@@ -29,7 +29,7 @@
                                 <li>
                                     <a href="{:U('Job/index')}">招聘管理</a>
                                 </li>
-                                <li>添加招聘</li>
+                                <li>修改招聘</li>
                                 <a href="{:U('Job/index')}" class="btn btn-primary pull-right "><i class="fa fa-arrow-left"></i>返回 </a>
                             </ul>
                             <div class="clearfix">
@@ -48,7 +48,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>添加招聘</h4>
+                                <h4><i class="fa fa-table"></i>修改招聘</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -63,7 +63,7 @@
                                         <label class="col-sm-3 control-label">职位名称：</label>
 
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control" name="title" id="title" value=""
+                                            <input type="text" class="form-control" name="title" id="title" value="{$info.title}"
                                                     placeholder="职位名称">
                                         </div>
                                     </div>
@@ -73,7 +73,7 @@
                                         <div class="col-sm-4">
                                             <select class="form-control" name="type" id="type">
                                                 <volist name="list" id="v">
-                                                    <option value="{$v.id}">{$v.name}</option>
+                                                    <option value="{$v.id}" <if condition="$v['id'] eq $info['type']">selected=selected</if>>{$v.name}</option>
                                                 </volist>
                                             </select>
 
@@ -83,7 +83,7 @@
                                         <label class="col-sm-3 control-label">招聘人数：</label>
 
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control" name="num" id="num" value=""
+                                            <input type="text" class="form-control" name="num" id="num" value="{$info.num}"
                                                     placeholder="招聘人数">
                                         </div>
                                     </div>
@@ -91,7 +91,7 @@
                                         <label class="col-sm-3 control-label">工作地点：</label>
 
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control" name="address" id="address" value=""
+                                            <input type="text" class="form-control" name="address" id="address" value="{$info.address}"
                                                     placeholder="工作地点">
                                         </div>
                                     </div>
@@ -99,7 +99,7 @@
                                         <label class="col-sm-3 control-label">截止时间：</label>
 
                                         <div class="col-sm-4">
-                                            <input type="text" class="form-control" name="endtime" id="endtime" value=""
+                                            <input type="text" class="form-control" name="endtime" id="endtime" value="{$info.endtime}"
                                                     placeholder="截止时间">
                                         </div>
                                     </div>
@@ -107,21 +107,21 @@
                                         <label class="col-sm-3 control-label">职位描述：</label>
 
                                         <div class="col-sm-8">
-                                            <textarea class="form-control" cols="8" rows="6" name="description" id="description" placeholder="职位描述"></textarea>
+                                            <textarea class="form-control" cols="8" rows="6" name="description" id="description" placeholder="职位描述">{$info.description}</textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">职位要求：</label>
 
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" rows="5" name="content" id="desc" placeholder="职位要求"></textarea>
+                                            <textarea class="form-control" rows="5" name="content" id="desc" placeholder="职位要求">{$info.content}</textarea>
                                         </div>
                                     </div>
 
 
                                     <div class="form-group">
                                         <div class="col-sm-offset-4 col-sm-6">
-
+                                            <input type="hidden" name="id" value="{$info.id}">
                                             <div type="text" class="btn btn-primary" id="submit">提交</div>
                                         </div>
                                     </div>
@@ -152,6 +152,7 @@
                         var num=$("input[name='num']").val();
                         var description=$("#description").val();
                         var address=$("input[name='address']").val();
+                        var id=$("input[name='id']").val();
                         var content=editor.html();
                         var type=$("#type").val();
                         var endtime=$("input[name='endtime']").val();
@@ -181,8 +182,9 @@
                         }
 
 
-                        $.post("{:U('Job/add')}",{
+                        $.post("{:U('Job/edit')}",{
                             'title':title,
+                            'id':id,
                             'content':content,
                             'address':address,
                             'description':description,

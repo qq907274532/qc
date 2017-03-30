@@ -27,10 +27,10 @@
                                     <a href="{:U('Index/index')}">首页</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0)">招聘管理</a>
+                                    <a href="javascript:void(0)">基本设置</a>
                                 </li>
-                                <li>职位列表</li>
-                                <a href="{:U('Job/add')}" class="btn btn-primary pull-right ">增加职位 <i class="fa fa-arrow-right"></i></a>
+                                <li>关于我们</li>
+                                <a href="{:U('About/add')}" class="btn btn-primary pull-right ">增加关于我们 <i class="fa fa-arrow-right"></i></a>
                             </ul>
                             <div class="clearfix">
 
@@ -48,7 +48,7 @@
                         <!-- BOX -->
                         <div class="box border primary">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>职位列表</h4>
+                                <h4><i class="fa fa-table"></i>关于我们列表</h4>
                                 <div class="tools">
 
                                     <a href="javascript:;" class="collapse">
@@ -62,12 +62,8 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>职位名称</th>
-                                        <th>职位类别</th>
-                                        <th>招聘人数</th>
-                                        <th>工作地点</th>
+                                        <th>标题</th>
                                         <th>状态</th>
-                                        <th class="hidden-480">截止时间</th>
                                         <th class="hidden-480">创建时间</th>
                                         <th class="hidden-480">更新时间</th>
                                         <th>操作</th>
@@ -78,24 +74,21 @@
                                         <tr>
                                             <td>{$v.id}</td>
                                             <td>{$v.title}</td>
-                                            <td>{$v.typeName}</td>
-                                            <td>{$v.num}</td>
-                                            <td>{$v.address}</td>
                                             <td>
-                                                <if condition="$v.status eq Common\Model\JobModel::STATUS_ENABLE">
+                                                <if condition="$v.status eq Common\Model\AboutModel::STATUS_ENABLE">
                                                     <span class="label label-primary arrow-in">{$v.statusName}</span>
                                                     <else/>
                                                     <span class="label  label-danger arrow-out ">{$v.statusName}</span>
                                                 </if>
                                             </td>
-                                            <td>{$v.endtime}</td>
+
                                             <td class="hidden-480">{$v.create_time}</td>
                                             <td class="hidden-480">{$v.update_time}</td>
                                             <td>
 
-                                              <a href="{:U('Job/edit',array('id'=>$v['id']))}" class="fa fa-pencil tip" data-original-title="修改"></a>
+                                              <a href="{:U('About/edit',array('id'=>$v['id']))}" class="fa fa-pencil tip" data-original-title="修改"></a>
 
-                                              <if condition="$v.status eq Common\Model\JobCateModel::STATUS_ENABLE">
+                                              <if condition="$v.status eq Common\Model\AboutModel::STATUS_ENABLE">
                                                 <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="禁用"> </a>
                                                <else/>
                                                 <a href="javascript:;" class="fa fa-trash-o tip checkStatus" data-original-title="启用"> </a>
@@ -128,15 +121,15 @@
                     var msg=$(this).attr("data-original-title");
                     var status;
                     if(msg=="启用") {
-                        status="<?=Common\Model\JobCateModel::STATUS_DISABLE?>";
+                        status="<?=Common\Model\AboutModel::STATUS_DISABLE?>";
                     }else {
-                        status="<?=Common\Model\JobCateModel::STATUS_ENABLE?>";
+                        status="<?=Common\Model\AboutModel::STATUS_ENABLE?>";
                     }
                     layer.confirm('你确定要'+msg+"吗？", {
                         btn: ['确定','取消'] //按钮
                     }, function(){
                         $.ajax({
-                            url: "{:U('JobCate/del')}",
+                            url: "{:U('About/del')}",
                             type: "POST",
                             data :{ "id":id,"status":status },
                             dataType: "json",
